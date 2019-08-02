@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:qr_scanner/qr_scanner.dart';
@@ -10,9 +12,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<QrScannerState> _scannerKey = GlobalKey<QrScannerState>();
+
+  String title = "Example";
+
   @override
   void initState() {
     super.initState();
+
+    Timer(Duration(seconds: 8), () => setState(() => title = "OwO"));
+  }
+
+  void _handleScan(String result) {
+    print(result);
   }
 
   @override
@@ -20,13 +32,16 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('QR Scanner Example'),
+          title: Text(title),
         ),
         body: Center(
           child: SizedBox(
             width: 350,
             height: 350,
-            child: QrScanner(),
+            child: QrScanner(
+              key: _scannerKey,
+              onSuccessfulScan: _handleScan,
+            ),
           ),
         ),
       ),
